@@ -4,7 +4,7 @@ import axios from 'axios'
 export function Request(config) {
   const instance = axios.create({
     //创建一个axios一个实例对象
-    baseURL: 'http://106.54.54.237:8000/api/h8',
+    baseURL: 'http://timemeetyou.com:8889/api/private/v1/',
     timeout: 50000
   });
 
