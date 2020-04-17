@@ -11,6 +11,7 @@ export function Request(config) {
   //设置请求拦截器
   instance.interceptors.request.use(res => {
     //请求成功之后的拦截 像请求发出去以后提示用户请求中可以在这设置!
+    res.headers.Authorization = window.sessionStorage.getItem('token');
     return res; //拦截操作做完以后一定要记得返回数据，不然一直卡在这没有数据请求出去!
 
   }, err => {
