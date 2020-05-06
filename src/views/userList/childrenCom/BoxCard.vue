@@ -29,13 +29,18 @@
       <el-table-column label="操作">
         <template slot-scope="s">
           <el-tooltip class="item" effect="dark" content="修改信息" placement="top">
-            <el-button type="primary" icon="el-icon-edit" @click="editClick(s.row.id)"></el-button>
+            <el-button size="mini" type="primary" icon="el-icon-edit" @click="editClick(s.row.id)"></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="删除信息" placement="top">
-            <el-button type="danger" icon="el-icon-delete" @click="removeClick(s.row.id)"></el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              icon="el-icon-delete"
+              @click="removeClick(s.row.id)"
+            ></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="分配角色" placement="top">
-            <el-button type="warning" icon="el-icon-setting"></el-button>
+            <el-button size="mini" type="warning" icon="el-icon-setting" @click="allotClick(s.row)"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -98,6 +103,29 @@
         <el-button type="primary" @click="editForm">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!--   分配角色弹窗 -->
+    <el-dialog title="分配角色" :visible.sync="setRoleFlag" width="50%">
+      <div>
+        <p>当前的用户：{{allotRoleInfo.username}}</p>
+        <p>当前的角色：{{allotRoleInfo.role_name}}</p>
+        <P>
+          分配新角色：
+          <el-select v-model="selectRoleId" placeholder="请选择">
+            <el-option
+              v-for="item in roleListData"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </P>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setRoleFlag = false">取 消</el-button>
+        <el-button type="primary" @click="saveSelectData">确 定</el-button>
+      </span>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -105,7 +133,13 @@
 import usersRequest from "@/network/users";
 import { stateRequest } from "@/network/state";
 import { addRequest } from "@/network/homepage";
-import { editRequest, editUserInfo, removeUserInfo } from "@/network/homepage";
+import {
+  editRequest,
+  editUserInfo,
+  removeUserInfo,
+  getRoleList,
+  sendRoleData
+} from "@/network/homepage";
 
 export default {
   name: "BoxCard",
@@ -132,10 +166,10 @@ export default {
       dialogVisible: false, // 添加用户--对话框的显示与隐藏
       ruleForm: {
         //添加用户表单信息
-        username: "asd",
-        password: "sadasdasd",
-        email: "1436454@qq.com",
-        mobile: "13874125462"
+        username: "",
+        password: "",
+        email: "",
+        mobile: ""
       },
       rules: {
         //用户规则
@@ -175,7 +209,11 @@ export default {
         email: "",
         mobile: ""
       },
-      editId: "" //保存具体id值
+      editId: "", //保存具体id值
+      setRoleFlag: false, //控制分配角色弹窗的flag
+      allotRoleInfo: {}, //保存当前用户的信息
+      roleListData: [], //保存所有角色列表
+      selectRoleId: "" //已选中的角色id
     };
   },
   props: {
@@ -298,6 +336,34 @@ export default {
         .catch(err => {
           return this.$message.warning("取消用户删除");
         });
+    },
+    //监听分配角色按钮点击
+    allotClick(data) {
+      this.allotRoleInfo = data;
+      this.setRoleFlag = true;
+      getRoleList().then(res => {
+        if (res.meta.status !== 200) {
+          this.$message.error(res.meta.msg);
+        } else {
+          this.roleListData = res.data;
+        }
+      });
+    },
+    //监听分配角色弹窗里面的确定按钮点击
+    saveSelectData() {
+      if (!this.selectRoleId) {
+        return this.$message.error("请选择要选择的角色");
+      } else {
+        sendRoleData(this.allotRoleInfo.id, this.selectRoleId).then(res => {
+          if (res.meta.status !== 200) {
+            this.$message.error(res.meta.msg);
+          } else {
+            this.setRoleFlag = false;
+            this.$message.success("分配新角色成功");
+            this.$emit("changRole");
+          }
+        });
+      }
     }
   }
 };

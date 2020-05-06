@@ -69,7 +69,7 @@ export default {
         if (flag) {
           loginRequest(this.loginData).then(res => {
             if (res.meta.status !== 200) {
-              return this.$message.error("登陆失败");
+              return this.$message.error(res.meta.msg);
             } else {
               window.sessionStorage.setItem("token", res.data.token);
               this.$router.push("/home");

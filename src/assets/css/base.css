@@ -4,4 +4,29 @@
 }
 html,body,#app{
   height: 100%;
+  min-width: 1200px;
+}
+
+/* el ui组件库里的card组件的样式设置 */
+.el-card{
+  margin-top: 20px;
+  scroll-margin-bottom: 15px;
+  text-align: left;
+  line-height: 24px;
+}
+.el-dialog{
+  text-align: left;
+  line-height: 40px;
+}
+
+/* 级联选择器的高度 */
+.el-cascader__dropdown {
+  height: 300px;
+}
+.el-cascader-panel {
+  height: 300px;
+}
+/* 富文本编辑区 */
+.ql-blank{
+  min-height: 200px;
 }

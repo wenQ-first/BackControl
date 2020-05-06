@@ -42,7 +42,6 @@ export default {
     }
   },
   created() {
-    console.log("sadasd");
     homeRequest().then(res => {
       this.menuData = res.data;
     });
@@ -61,7 +60,7 @@ export default {
   padding-left: 0;
   justify-content: space-between;
   align-items: center;
-  background-color: #373d41;
+  background-color: #0e0e0e;
   color: #fff;
   text-align: center;
 }

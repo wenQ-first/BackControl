@@ -34,3 +34,21 @@ export function removeUserInfo(id) {
   });
 }
 
+//获取所有角色列表
+export function getRoleList() {
+  return Request({
+    url: 'roles',
+    method: 'get'
+  });
+}
+
+//提交选择的新角色属性
+export function sendRoleData(id, rid) {
+  return Request({
+    url: `users/${id}/role `,
+    method: 'put',
+    data: {
+      rid
+    }
+  });
+}

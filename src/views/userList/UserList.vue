@@ -11,6 +11,7 @@
       @changSize="changSize"
       @updateUser="getUserClick"
       @removeUser="getUserClick"
+      @changRole="getUserClick"
     ></box-card>
   </div>
 </template>

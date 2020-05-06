@@ -43,6 +43,11 @@ export default {
     path() {
       let p = this.$route.path;
       p = p.slice(1);
+
+      //添加商品页面增加后，无法判断goods选项的高亮,必须进行此判断
+      if (p == "add") {
+        p = "goods";
+      }
       return p;
     }
   },
